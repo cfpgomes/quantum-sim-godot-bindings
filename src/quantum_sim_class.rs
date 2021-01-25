@@ -36,16 +36,12 @@ impl QuantumSim {
         initial_states: Vec<usize>,
     ) {
         self.quantum_circuit = Some(QuantumCircuit::from_states(num_qubits, initial_states));
-        if let Some(circuit) = self.quantum_circuit.as_ref() {
-            godot_print!("{}", circuit.state());
-        }
     }
 
     #[export]
     unsafe fn apply_hadamard(&mut self, _owner: &Node, qubit: usize) {
         if let Some(circuit) = self.quantum_circuit.as_mut() {
             circuit.apply_gate(Gate::H(qubit));
-            godot_print!("{}", circuit.state());
         }
     }
 
@@ -53,7 +49,6 @@ impl QuantumSim {
     unsafe fn apply_not(&mut self, _owner: &Node, qubit: usize) {
         if let Some(circuit) = self.quantum_circuit.as_mut() {
             circuit.apply_gate(Gate::X(qubit));
-            godot_print!("{}", circuit.state());
         }
     }
 
@@ -61,7 +56,6 @@ impl QuantumSim {
     unsafe fn apply_cnot(&mut self, _owner: &Node, control: usize, target: usize) {
         if let Some(circuit) = self.quantum_circuit.as_mut() {
             circuit.apply_gate(Gate::CX(control, target));
-            godot_print!("{}", circuit.state());
         }
     }
 
@@ -83,7 +77,6 @@ impl QuantumSim {
     unsafe fn measure(&mut self, _owner: &Node) -> usize {
         if let Some(circuit) = self.quantum_circuit.as_mut() {
             let result = circuit.measure();
-            godot_print!("{}", circuit.state());
             result
         } else {
             0
